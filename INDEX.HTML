@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="si">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Hash Router Demo (#/)</title>
+    <style>
+      body { font-family: sans-serif; margin: 0; }
+      header { position: sticky; top: 0; padding: 12px 16px; border-bottom: 1px solid #ddd; background: #fff; }
+      nav a { margin-right: 12px; text-decoration: none; }
+      nav a.active { font-weight: 700; }
+      main { max-width: 880px; margin: 28px auto; padding: 0 16px; }
+      .muted { opacity: .7; }
+      footer { border-top: 1px solid #eee; padding: 24px 16px; margin-top: 32px; }
+      code { background: #f6f8fa; padding: 2px 6px; border-radius: 6px; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <a href="#/" data-route="/">මුල් පිටුව</a>
+        <a href="#/about" data-route="/about">අපි ගැන</a>
+        <a href="#/contact" data-route="/contact">සම්බන්ධ වන්න</a>
+      </nav>
+    </header>
+    <main id="app"></main>
+    <footer>
+      <div class="muted">මෙය hash-based router එකක්. උදා: <code>https://example.com/#/about</code></div>
+    </footer>
+
+    <script>
+      const routes = {
+        "/": `
+          <h1>මුල් පිටුව</h1>
+          <p>මෙය <strong>#/</strong> hash routing භාවිතා කරන අවම single-page app එකකි.</p>
+        `,
+        "/about": `
+          <h1>අපි ගැන</h1>
+          <p>මෙය About page එකයි.</p>
+        `,
+        "/contact": `
+          <h1>සම්බන්ධ වන්න</h1>
+          <p>Email: hello@example.com</p>
+        `,
+      };
+
+      function setActiveLink(path) {
+        document.querySelectorAll("nav a").forEach(a => {
+          a.classList.toggle("active", a.getAttribute("data-route") === path);
+        });
+      }
+
+      function render() {
+        let path = location.hash.slice(1) || "/";
+        if (!routes[path]) path = "/";
+        document.getElementById("app").innerHTML = routes[path];
+        setActiveLink(path);
+      }
+
+      window.addEventListener("hashchange", render);
+      window.addEventListener("DOMContentLoaded", render);
+    </script>
+  </body>
+</html>
